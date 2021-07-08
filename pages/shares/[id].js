@@ -3,23 +3,43 @@ import Head from 'next/head'
 import { format } from 'date-fns'
 import Clipboard from 'react-clipboard.js'
 
-export default class Home extends Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      text: '',
+const SharePage = ({ shareId, data }) => {
+  return (
+    <Share shareId={shareId} data={data}/>
+  )
+}
+
+export default SharePage
+
+export async function getServerSideProps(ctx) {
+  const shareId = ctx.query.id
+
+  return {
+    props: {
+      shareId,
       data: [
         {
           id: '12345',
           content: 'test text 1',
-          createdAt: new Date('2021-07-08T06:05:16.266Z')
+          createdAt: '2021-07-08T06:05:16.266Z'
         },
         {
           id: '12346',
           content: 'test text 2',
-          createdAt: new Date('2021-07-08T06:05:16.266Z')
+          createdAt: '2021-07-08T06:05:16.266Z'
         },
-      ],
+      ]
+    }
+  }
+}
+
+class Share extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      text: '',
+      data: this.props.data,
     };
   }
 
@@ -53,7 +73,7 @@ export default class Home extends Component {
             {d.content}
           </div>
           <div className="mt-5 flex justify-between items-center">
-            <div className="text-gray-500 text-sm">{ format(d.createdAt, 'yyyy-MM-dd HH:mm:ss') }</div>
+            <div className="text-gray-500 text-sm">{ format(new Date(d.createdAt), 'yyyy-MM-dd HH:mm:ss') }</div>
             <div className="flex space-x-2">
                 <Clipboard className="bg-green-50 text-green-500 px-2 h-6 text-xs rounded-lg" data-clipboard-text={d.content} onSuccess={this.onCopySuccess.bind(this)}>
                   Copy
