@@ -43,6 +43,7 @@ class Share extends Component {
     this.state = {
       text: '',
       data: this.props.data,
+      pending: false,
     };
   }
 
@@ -57,6 +58,14 @@ class Share extends Component {
       return
     }
 
+    if (this.state.pending) {
+      return
+    }
+
+    this.setState({
+      pending: true
+    })
+
     const { data } = await axios.post(`/api/shares?shareId=${this.props.shareId}`, {
       content: this.state.text,
       createdAt: new Date()
@@ -66,6 +75,7 @@ class Share extends Component {
 
     this.setState({
       text: '',
+      pending: false,
       data: [data, ...this.state.data]
     })
   }
