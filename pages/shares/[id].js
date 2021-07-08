@@ -2,6 +2,9 @@ import { Component } from 'react'
 import Head from 'next/head'
 import { format } from 'date-fns'
 import Clipboard from 'react-clipboard.js'
+import axios from 'axios'
+import { listShares } from '../../db/fauna'
+import { config } from '../../config'
 
 const SharePage = ({ shareId, data }) => {
   return (
@@ -14,21 +17,21 @@ export default SharePage
 export async function getServerSideProps(ctx) {
   const shareId = ctx.query.id
 
+  if (!config.SHARES_WHITELIST.includes(shareId)) {
+    return {
+      redirect: {
+        destination: '/404',
+        permanent: false
+      }
+    }
+  }
+
+  const data = await listShares(shareId)
+
   return {
     props: {
       shareId,
-      data: [
-        {
-          id: '12345',
-          content: 'test text 1',
-          createdAt: '2021-07-08T06:05:16.266Z'
-        },
-        {
-          id: '12346',
-          content: 'test text 2',
-          createdAt: '2021-07-08T06:05:16.266Z'
-        },
-      ]
+      data
     }
   }
 }
@@ -54,11 +57,25 @@ class Share extends Component {
       return
     }
 
-    console.log('add ', this.state.text.trim())
+    const { data } = await axios.post(`/api/shares?shareId=${this.props.shareId}`, {
+      content: this.state.text,
+      createdAt: new Date()
+    })
+
+    console.log('add', data)
+
+    this.setState({
+      text: '',
+      data: [data, ...this.state.data]
+    })
   }
 
   async handleDelete(id) {
-    console.log('delete ', id)
+    const { data: r } = await axios.delete(`/api/shares?shareId=${this.props.shareId}&id=${id}`)
+    console.log('delete ', id, r)
+
+    const list = this.state.data.filter(d => d.id !== id)
+    this.setState({ data: list })
   }
 
   onCopySuccess() {
@@ -95,7 +112,7 @@ class Share extends Component {
           <title>Text Share</title>
           <link rel="icon" href="/favicon.ico" />
         </Head>
-  
+
         <main>
           <div className="bg-gray-50 min-h-screen">
             <div className="max-w-screen-md mx-auto py-10">
@@ -115,7 +132,7 @@ class Share extends Component {
                   </button>
                 </div>
               </div>
-            
+
               {this.renderList()}
 
             </div>
