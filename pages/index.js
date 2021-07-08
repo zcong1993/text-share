@@ -1,11 +1,25 @@
 import { Component } from 'react'
 import Head from 'next/head'
 
-/**
- * data [{ id: string, content: string, created_at: Date }]
- */
-
 export default class Home extends Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      data: [
+        {
+          id: '12345',
+          content: 'test text 1',
+          createdAt: '2021-07-08T06:05:16.266Z'
+        },
+        {
+          id: '12346',
+          content: 'test text 2',
+          createdAt: '2021-07-08T06:05:16.266Z'
+        },
+      ],
+    };
+  }
+
   render() {
     return (
       <div className="flex flex-col items-center min-h-screen py-2">
