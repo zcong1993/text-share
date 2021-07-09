@@ -8,7 +8,7 @@
 
 ## Deploy your own
 
-### 1. setup [fauna db](https://dashboard.fauna.com)
+### 1. setup [fauna db](https://fauna.com)
 
 - create database and collection
 - create index for `shareId`
