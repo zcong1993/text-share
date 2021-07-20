@@ -15,10 +15,7 @@ export async function getServerSideProps(ctx) {
 
   if (!config.SHARES_WHITELIST.includes(shareId)) {
     return {
-      redirect: {
-        destination: '/404',
-        permanent: false
-      }
+      notFound: true
     }
   }
 
