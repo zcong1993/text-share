@@ -63,7 +63,7 @@ export class Share extends Component {
   renderList() {
     return this.state.data.map(d => {
       return (
-        <div className="shadow bg-white rounded-lg p-5 mb-5" key={d.id}>
+        <div className="shadow bg-white rounded-lg p-5 mb-5 break-words" key={d.id}>
           <div>
             {d.content}
           </div>
