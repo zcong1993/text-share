@@ -10,36 +10,40 @@ const toShareData = (faunaData) => {
   }
 }
 
-export const client = new Client({
-  secret: config.FAUNADB_SECRET,
-  keepAlive: false,
-})
+export class Fauna {
+  constructor(config) {
+    this.client = new Client({
+      secret: config.FAUNADB_SECRET,
+      keepAlive: false,
+    })
+  }
 
-export const createShare = async (data) => {
-  const r = await client.query(
-    Create(
-      Collection(config.FAUNADB_COLLECTION), { data }
+  async createShare(data) {
+    const r = await client.query(
+      Create(
+        Collection(config.FAUNADB_COLLECTION), { data }
+      )
     )
-  )
 
-  return toShareData(r)
-}
+    return toShareData(r)
+  }
 
-export const listShares = async (shareId) => {
-  const { data } = await client.query(Map(
-    Paginate(
-      Match(Index(config.FAUNADB_SHARE_ID_INDEX), shareId)
-    ),
-    Lambda("X", Get(Var("X")))
-  ))
+  async listShares(shareId) {
+    const { data } = await client.query(Map(
+      Paginate(
+        Match(Index(config.FAUNADB_SHARE_ID_INDEX), shareId)
+      ),
+      Lambda("X", Get(Var("X")))
+    ))
 
-  return data.reverse().map(toShareData)
-}
+    return data.reverse().map(toShareData)
+  }
 
-export const deleteShare = async (shareId, id) => {
-  return client.query(
-    Delete(
-      Ref(Collection(config.FAUNADB_COLLECTION), id)
+  async deleteShare(shareId, id) {
+    return client.query(
+      Delete(
+        Ref(Collection(config.FAUNADB_COLLECTION), id)
+      )
     )
-  )
+  }
 }

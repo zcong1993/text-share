@@ -1,0 +1,22 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+model share {
+  id       Int @id @default(autoincrement())
+  shareId String @db.VarChar(100)
+  content String @db.Text
+  createdAt DateTime? @default(now()) @db.Timestamptz(6)
+  updatedAt DateTime? @default(now()) @db.Timestamptz(6)
+
+  @@index([shareId], name: "share_id_idx")
+  @@map("ts_share")
+}

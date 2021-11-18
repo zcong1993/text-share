@@ -1,6 +1,6 @@
 import { Share } from '../../components/share'
-import { listShares } from '../../db/fauna'
 import { config } from '../../config'
+import { db } from '../../db'
 
 const SharePage = ({ shareId, data }) => {
   return (
@@ -19,7 +19,7 @@ export async function getServerSideProps(ctx) {
     }
   }
 
-  const data = await listShares(shareId)
+  const data = await db.listShares(shareId)
 
   return {
     props: {

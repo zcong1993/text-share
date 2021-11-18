@@ -1,8 +1,8 @@
 // Next.js API route support: https://nextjs.org/docs/api-routes/introduction
-import { createShare, deleteShare, listShares } from '../../db/fauna'
+import { db } from '../../db'
 
 const handleCreate = async (shareId, data, res) => {
-  const r = await createShare({
+  const r = await db.createShare({
     shareId,
     ...data,
   })
@@ -11,12 +11,12 @@ const handleCreate = async (shareId, data, res) => {
 }
 
 const handleList = async (shareId, res) => {
-  const r = await listShares(shareId)
+  const r = await db.listShares(shareId)
   res.status(200).json(r)
 }
 
 const handleDelete = async (shareId, id, res) => {
-  const r = await deleteShare(shareId, id)
+  const r = await db.deleteShare(shareId, id)
   res.status(200).json(r)
 }
 
