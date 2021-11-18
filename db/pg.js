@@ -19,8 +19,7 @@ export class Pg {
       }
     })
 
-    console.log(res)
-
+    // todo: remove json convert will cause getServerSideProps error
     return JSON.parse(JSON.stringify(res))
   }
 
