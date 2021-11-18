@@ -19,7 +19,7 @@ export class Fauna {
   }
 
   async createShare(data) {
-    const r = await client.query(
+    const r = await this.client.query(
       Create(
         Collection(config.FAUNADB_COLLECTION), { data }
       )
@@ -29,7 +29,7 @@ export class Fauna {
   }
 
   async listShares(shareId) {
-    const { data } = await client.query(Map(
+    const { data } = await this.client.query(Map(
       Paginate(
         Match(Index(config.FAUNADB_SHARE_ID_INDEX), shareId)
       ),
@@ -40,7 +40,7 @@ export class Fauna {
   }
 
   async deleteShare(shareId, id) {
-    return client.query(
+    return this.client.query(
       Delete(
         Ref(Collection(config.FAUNADB_COLLECTION), id)
       )

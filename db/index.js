@@ -5,7 +5,6 @@ import { Pg } from './pg'
 let _db;
 
 const getDb = () => {
-  console.log(111)
   if (config.DB_TYPE === 'fauna') {
     return new Fauna(config)
   }
@@ -24,4 +23,3 @@ if (process.env.NODE_ENV === 'production') {
 }
 
 export const db = _db
-
