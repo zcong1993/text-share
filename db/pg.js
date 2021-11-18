@@ -24,6 +24,10 @@ export class Pg {
   }
 
   async deleteShare(shareId, id) {
-    await this.client.share.delete(id)
+    await this.client.share.delete({
+      where: {
+        id: parseInt(id, 10)
+      }
+    })
   }
 }
