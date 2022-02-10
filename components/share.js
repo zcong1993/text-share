@@ -64,8 +64,7 @@ export class Share extends Component {
     return this.state.data.map(d => {
       return (
         <div className="shadow bg-white rounded-lg p-5 mb-5 break-words" key={d.id}>
-          <div>
-            {d.content}
+          <div dangerouslySetInnerHTML={{__html: d.content.replace(/\r?\n/g,'<br/>')}}>
           </div>
           <div className="mt-5 flex justify-between items-center">
             <div className="text-gray-500 text-sm">{ format(new Date(d.createdAt), 'yyyy-MM-dd HH:mm:ss') }</div>
