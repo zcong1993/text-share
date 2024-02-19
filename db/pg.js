@@ -12,7 +12,8 @@ export class Pg {
   async listShares(shareId) {
     const res = await this.client.share.findMany({
       where: {
-        shareId
+        shareId,
+        deletedAt: null
       },
       orderBy: {
         createdAt: 'desc'
@@ -24,9 +25,12 @@ export class Pg {
   }
 
   async deleteShare(shareId, id) {
-    await this.client.share.delete({
+    await this.client.share.update({
       where: {
         id: parseInt(id, 10)
+      },
+      data: {
+        deletedAt: new Date()
       }
     })
   }

@@ -16,6 +16,7 @@ model share {
   content String @db.Text
   createdAt DateTime? @default(now()) @db.Timestamptz(6)
   updatedAt DateTime? @default(now()) @db.Timestamptz(6)
+  deletedAt DateTime? @db.Timestamptz(6)
 
   @@index([shareId], name: "share_id_idx")
   @@map("ts_share")
